@@ -8,7 +8,7 @@ module.exports = function (text) {
   // splits the paragraph at end of sentence punctuation
   var paragraphToSentences = function (paragraph) {
     paragraph = paragraph.trim();
-    var sentences = paragraph.match( /[^\.!\?]+[\.!\?]+/g );
+    var sentences = paragraph.match( /[^\.!\?]+[\.!\?(?="|')]+(\s|$)/g );
     return {
       raw: paragraph,
       type: 'paragraph',
