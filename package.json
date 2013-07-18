@@ -4,7 +4,10 @@
   "description": "Text parser",
   "keywords": ["text", "parser", "plaintext"],
   "author": "Stephen Morrison <srmorrisonjit@gmail.com>",
-  "license": "MIT",
+  "licenses": {
+    "type": "MIT",
+    "url":"http://srmor.mit-license.org/"
+  },
   "devDependencies": {
     "mocha": "*",
     "should": "*"
