@@ -1,0 +1,13 @@
+{
+  "name": "text-parse",
+  "version": "1.0.0",
+  "description": "Text parser",
+  "keywords": ["text", "parser", "plaintext"],
+  "author": "Stephen Morrison <srmorrisonjit@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
+  "main": "index"
+}
