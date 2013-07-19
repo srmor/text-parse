@@ -1,14 +1,14 @@
 module.exports = function (text) {
   // splits the text at \n
-  var textToParagraphs = function (text) {
+  var textToParagraphs = function(text) {
     var paragraphs = text.split( /[\r\n|\n|\r]+/g );
     return paragraphs.map(paragraphToSentences);
   };
 
   // splits the paragraph at end of sentence punctuation
-  var paragraphToSentences = function (paragraph) {
+  var paragraphToSentences = function(paragraph) {
     paragraph = paragraph.trim();
-    var sentences = paragraph.match( /[^\.!\?]+[\.!\?(?="|')]+(\s|$)/g );
+    var sentences = paragraph.match( /[^\.!\?]+[\.!\?(?="|')]+/g );
     return {
       raw: paragraph,
       type: 'paragraph',
@@ -17,7 +17,7 @@ module.exports = function (text) {
   };
 
   // splits the sentence at the spaces
-  var sentenceToWords = function (sentence) {
+  var sentenceToWords = function(sentence) {
     sentence = sentence.trim();
     var words = sentence.split(/\s+/);
     return {
@@ -28,7 +28,7 @@ module.exports = function (text) {
   };
 
   // splits the word into characters and classifies each
-  var wordToChars = function (word) {
+  var wordToChars = function(word) {
     var chars = [];
     var letters = '';
     var punctuation = [];
