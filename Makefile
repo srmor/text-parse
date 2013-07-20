@@ -1,7 +1,7 @@
 test:
 	NODE_ENV=test ./node_modules/.bin/mocha --check-leaks \
 		-w  \
-		--reporter dot matrix \
+		--reporter spec \
 				test/*
 
 .PHONY: test
