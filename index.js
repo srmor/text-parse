@@ -1,34 +1,36 @@
-module.exports = function (text) {
+var textParse = function() {
+  var self = {};
+
   // splits the text at \n
-  var textToParagraphs = function(text) {
+  self.textToParagraphs = function(text) {
     var paragraphs = text.split( /[\r\n|\n|\r]+/g );
-    return paragraphs.map(paragraphToSentences);
+    return paragraphs.map(self.paragraphToSentences);
   };
 
   // splits the paragraph at end of sentence punctuation
-  var paragraphToSentences = function(paragraph) {
+  self.paragraphToSentences = function(paragraph) {
     paragraph = paragraph.trim();
     var sentences = paragraph.match( /[^\.!\?]+[\.!\?(?="|')]+/g );
     return {
       raw: paragraph,
       type: 'paragraph',
-      children: sentences.map(sentenceToWords)
+      children: sentences.map(self.sentenceToWords)
     };
   };
 
   // splits the sentence at the spaces
-  var sentenceToWords = function(sentence) {
+  self.sentenceToWords = function(sentence) {
     sentence = sentence.trim();
     var words = sentence.split(/\s+/);
     return {
       raw: sentence,
       type: 'sentence',
-      children: words.map(wordToChars)
+      children: words.map(self.wordToChars)
     };
   };
 
   // splits the word into characters and classifies each
-  var wordToChars = function(word) {
+  self.wordToChars = function(word) {
     var chars = [];
     var letters = '';
     var punctuation = [];
@@ -56,5 +58,10 @@ module.exports = function (text) {
     };
   };
 
-  return textToParagraphs(text);
+  return self;
+};
+
+module.exports = function(text) {
+  var parse = textParse();
+  return parse.textToParagraphs(text);
 };
