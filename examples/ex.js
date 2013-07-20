@@ -1,6 +1,6 @@
 var parse = require('..'),
     fs = require('fs'),
-    read = fs.readFileSync,
+    read = fs.readFileSync
     text = read('ex.txt', 'utf8'),
     util = require('util');
 
