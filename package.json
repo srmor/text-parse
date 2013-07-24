@@ -8,6 +8,9 @@
     "type": "MIT",
     "url":"http://srmor.mit-license.org/"
   },
+  "dependencies": {
+    "pos": "0.1.2"
+  },
   "devDependencies": {
     "mocha": "*",
     "should": "*"

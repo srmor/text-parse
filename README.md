@@ -21,6 +21,10 @@ var parse = require('text-parse');
 console.log(parse(text));
 ```
 
+## Part of Speech Option
+
+Optionally text-parse can return the part of speech of each word (powered by [pos](https://github.com/fortnightlabs/pos-js)). To enable this option just include it in the option object parameter of the parser. So instead of using `var parseTree = parse(text)` you can do `var parseTree = parse(text, {pos: true})` and it will return a `partOfSpeech` attribute on all the word objects. The part of speech tags are the same tags that (pos)[https://github.com/fortnightlabs/pos-js] returns.
+
 ## Example
 
 ### Input

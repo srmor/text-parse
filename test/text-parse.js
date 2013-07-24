@@ -1,19 +1,15 @@
 var should = require('should'),
     textparse = require('../lib/text-parse');
 
-var parser;
-
-// instantiate the object
-beforeEach(function() {
-  parser = textparse();
-});
-
 // testing lib/text-parse
 describe('lib/text-parse', function() {
+  var parser;
 
   // text-parse.textToParagraphs
   describe('textToParagraphs', function() {
     beforeEach(function() {
+      parser = textparse();
+
       parser.paragraphToSentences = function(paragraph) {
         return paragraph;
       };
@@ -50,6 +46,8 @@ describe('lib/text-parse', function() {
   // text-parse.paragraphToSentences
   describe('paragraphToSentences', function() {
     beforeEach(function() {
+      parser = textparse();
+
       parser.sentenceToWords = function(sentence) {
         return sentence;
       };
@@ -109,6 +107,7 @@ describe('lib/text-parse', function() {
   // text-parse.sentenceToWords
   describe('sentenceToWords', function() {
     beforeEach(function() {
+      parser = textparse();
       parser.wordToChars = function(word) {
         return word;
       };
@@ -163,9 +162,12 @@ describe('lib/text-parse', function() {
 
   // text-parse.wordToChars
   describe('wordToChars', function() {
-
     // checking that returns raw, noPunctuation, type, and children attributes
-    describe('checking that returned object has correct attributes', function() {
+    describe('checking that returned object has correct attributes without POS', function() {
+      beforeEach(function() {
+        parser = textparse();
+      });
+
       it('should have a raw attribute which has the word with the punctuation', function() {
         var words = parser.wordToChars('This?');
 
@@ -182,6 +184,25 @@ describe('lib/text-parse', function() {
         var words = parser.wordToChars('This?');
 
         words.type.should.equal('word');
+      });
+
+      it('should not have a partOfSpeech attribute when the pos option is not true', function() {
+        var words = parser.wordToChars('This?');
+
+        should.not.exist(words.partOfSpeech);
+      });
+    });
+
+    // checking that it returns the part of speech when the option is enabled
+    describe('checking that the returned object has the correct attributes when getting the part of speech', function() {
+      beforeEach(function() {
+        parser = textparse({pos: true});
+      });
+
+      it('should have a partOfSpeech attribute which should be a string representation of the part of speech', function() {
+        var words = parser.wordToChars('John');
+
+        words.partOfSpeech.should.equal('NNP');
       });
     });
 
@@ -200,6 +221,18 @@ describe('lib/text-parse', function() {
           {raw: '?', type: 'punctuation'}
         ]);
       });
+    });
+  });
+
+  // wordPOS
+  describe('wordPOS', function() {
+    beforeEach(function() {
+      parser = textparse({pos: true});
+    });
+
+    it('should return a part of speech for a word', function() {
+      var partOfSpeech = parser.wordPOS('the');
+      partOfSpeech.should.be.a('string');
     });
   });
 });
