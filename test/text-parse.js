@@ -15,10 +15,19 @@ describe('lib/text-parse', function() {
       };
     });
 
+    it('should return an object with the right raw, type and children attributes', function() {
+      var paragraphs = parser.textToParagraphs('This is. a sentence? This is. a second sentences. Sentence it is.');
+
+      paragraphs.should.be.a('object');
+      paragraphs.raw.should.eql('This is. a sentence? This is. a second sentences. Sentence it is.');
+      paragraphs.type.should.eql('text');
+      paragraphs.should.have.property('children');
+    });
+
     it('should seperate any text into paragraphs divided by rn', function() {
       var paragraphs = parser.textToParagraphs('This is. a paragraph?\r\nThis is. a second. Paragraph.');
 
-      paragraphs.should.eql([
+      paragraphs.children.should.eql([
         'This is. a paragraph?',
         'This is. a second. Paragraph.'
       ]);
@@ -27,7 +36,7 @@ describe('lib/text-parse', function() {
     it('should seperate any text into paragraphs divided by n', function() {
       var paragraphs = parser.textToParagraphs('This is. a paragraph?\nThis is. a second. Paragraph.');
 
-      paragraphs.should.eql([
+      paragraphs.children.should.eql([
         'This is. a paragraph?',
         'This is. a second. Paragraph.'
       ]);
@@ -36,7 +45,7 @@ describe('lib/text-parse', function() {
     it('should seperate any text into paragraphs divided by r', function() {
       var paragraphs = parser.textToParagraphs('This is. a paragraph?\rThis is. a second. Paragraph.');
 
-      paragraphs.should.eql([
+      paragraphs.children.should.eql([
         'This is. a paragraph?',
         'This is. a second. Paragraph.'
       ]);
