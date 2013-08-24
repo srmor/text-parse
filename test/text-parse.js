@@ -15,40 +15,52 @@ describe('lib/text-parse', function() {
       };
     });
 
-    it('should return an object with the right raw, type and children attributes', function() {
-      var paragraphs = parser.textToParagraphs('This is. a sentence? This is. a second sentences. Sentence it is.');
+    // checking that it returns an object with raw, type, length and children attributes
+    describe('checking that the returned object has the correct attributes', function() {
+      it('should return an object with the right raw, type and children attributes', function() {
+        var text = parser.textToParagraphs('This is. a sentence? This is. a second sentences. Sentence it is.');
 
-      paragraphs.should.be.a('object');
-      paragraphs.raw.should.eql('This is. a sentence? This is. a second sentences. Sentence it is.');
-      paragraphs.type.should.eql('text');
-      paragraphs.should.have.property('children');
+        text.should.be.a('object');
+        text.raw.should.eql('This is. a sentence? This is. a second sentences. Sentence it is.');
+        text.type.should.eql('text');
+        text.should.have.property('children');
+      });
+
+      it('should give the right length for the number of paragraphs', function() {
+        var text = parser.textToParagraphs('This is. a paragraph?\r\nThis is. a second. Paragraph.\r\nAnd here. Is a. Paragraph the third!!');
+
+        text.length.should.eql(3);
+      });
     });
 
-    it('should seperate any text into paragraphs divided by rn', function() {
-      var paragraphs = parser.textToParagraphs('This is. a paragraph?\r\nThis is. a second. Paragraph.');
+    // checking that it parses paragraphs at \r\n, \n, and \r
+    describe('checking that it parses paragraphs correctly', function() {
+      it('should seperate any text into paragraphs divided by rn', function() {
+        var text = parser.textToParagraphs('This is. a paragraph?\r\nThis is. a second. Paragraph.');
 
-      paragraphs.children.should.eql([
-        'This is. a paragraph?',
-        'This is. a second. Paragraph.'
-      ]);
-    });
+        text.children.should.eql([
+          'This is. a paragraph?',
+          'This is. a second. Paragraph.'
+        ]);
+      });
 
-    it('should seperate any text into paragraphs divided by n', function() {
-      var paragraphs = parser.textToParagraphs('This is. a paragraph?\nThis is. a second. Paragraph.');
+      it('should seperate any text into paragraphs divided by n', function() {
+        var text = parser.textToParagraphs('This is. a paragraph?\nThis is. a second. Paragraph.');
 
-      paragraphs.children.should.eql([
-        'This is. a paragraph?',
-        'This is. a second. Paragraph.'
-      ]);
-    });
+        text.children.should.eql([
+          'This is. a paragraph?',
+          'This is. a second. Paragraph.'
+        ]);
+      });
 
-    it('should seperate any text into paragraphs divided by r', function() {
-      var paragraphs = parser.textToParagraphs('This is. a paragraph?\rThis is. a second. Paragraph.');
+      it('should seperate any text into paragraphs divided by r', function() {
+        var text = parser.textToParagraphs('This is. a paragraph?\rThis is. a second. Paragraph.');
 
-      paragraphs.children.should.eql([
-        'This is. a paragraph?',
-        'This is. a second. Paragraph.'
-      ]);
+        text.children.should.eql([
+          'This is. a paragraph?',
+          'This is. a second. Paragraph.'
+        ]);
+      });
     });
   });
 
@@ -62,33 +74,39 @@ describe('lib/text-parse', function() {
       };
     });
 
-    // checking that returns raw, type, and children attributes
+    // checking that returns raw, type, length, and children attributes
     describe('checking that returned object has correct attributes', function() {
       it('should return an object with an attribute, raw, which is the paragraph', function() {
-        var sentences = parser.paragraphToSentences('This is. a paragraph? With words and, punctuation.');
+        var paragraph = parser.paragraphToSentences('This is. a paragraph? With words and, punctuation.');
 
-        sentences.raw.should.equal('This is. a paragraph? With words and, punctuation.');
+        paragraph.raw.should.equal('This is. a paragraph? With words and, punctuation.');
       });
 
       it('should return an object with an attribute, type, which should be paragraph', function() {
-        var sentences = parser.paragraphToSentences('This is. a paragraph? With words and, punctuation.');
+        var paragraph = parser.paragraphToSentences('This is. a paragraph? With words and, punctuation.');
 
-        sentences.type.should.equal('paragraph');
+        paragraph.type.should.equal('paragraph');
       });
 
       it('should return an object with an attribute, children, which should be an array', function() {
-        var sentences = parser.paragraphToSentences('This is. a paragraph? With words and, punctuation.');
+        var paragraph = parser.paragraphToSentences('This is. a paragraph? With words and, punctuation.');
 
-        sentences.children.should.be.an.instanceOf(Array);
+        paragraph.children.should.be.an.instanceOf(Array);
+      });
+
+      it('should determine the correct number of sentences in the paragraph and put it as the length', function() {
+        var paragraph = parser.paragraphToSentences('This is. a paragraph? With words and, punctuation.');
+
+        paragraph.length.should.eql(3);
       });
     });
 
     // checking that it parses the paragraph correctly
     describe('checking that it parses correctly', function() {
       it('should split a paragraph into sentences', function() {
-        var sentences = parser.paragraphToSentences('This is. a paragraph? With words and, punctuation.');
+        var paragraph = parser.paragraphToSentences('This is. a paragraph? With words and, punctuation.');
 
-        sentences.children.should.eql([
+        paragraph.children.should.eql([
           'This is. ',
           'a paragraph? ',
           'With words and, punctuation.'
@@ -96,9 +114,9 @@ describe('lib/text-parse', function() {
       });
 
       it('should split a paragraph into sentences when they end with double quotes', function() {
-        var sentences = parser.paragraphToSentences('This is. a paragraph?" "With words and, punctuation."');
+        var paragraph = parser.paragraphToSentences('This is. a paragraph?" "With words and, punctuation."');
 
-        sentences.children.should.eql([
+        paragraph.children.should.eql([
           'This is. ',
           'a paragraph?" ',
           '"With words and, punctuation."'
@@ -106,9 +124,9 @@ describe('lib/text-parse', function() {
       });
 
       it('should split a paragraph and include the last sentence in the results even though there is no space after the punctuation', function() {
-        var sentences = parser.paragraphToSentences('This is. a paragraph? With words and, punctuation.');
+        var paragraph = parser.paragraphToSentences('This is. a paragraph? With words and, punctuation.');
 
-        sentences.children.should.include('With words and, punctuation.');
+        paragraph.children.should.include('With words and, punctuation.');
       });
     });
   });
@@ -122,33 +140,39 @@ describe('lib/text-parse', function() {
       };
     });
 
-    // checking that returns raw, type, and children attributes
+    // checking that returns raw, type, length and children attributes
     describe('checking that returned object has correct attributes', function() {
       it('should return an object with an attribute, raw, which is the sentence', function() {
-        var words = parser.sentenceToWords('This is a paragraph?');
+        var sentence = parser.sentenceToWords('This is a paragraph?');
 
-        words.raw.should.equal('This is a paragraph?');
+        sentence.raw.should.equal('This is a paragraph?');
       });
 
       it('should return an object with an attribute, type, which should be sentence', function() {
-        var words = parser.sentenceToWords('This is a paragraph?');
+        var sentence = parser.sentenceToWords('This is a paragraph?');
 
-        words.type.should.equal('sentence');
+        sentence.type.should.equal('sentence');
       });
 
       it('should return an object with an attribute, children, which should be an array', function() {
-        var words = parser.sentenceToWords('This is a paragraph?');
+        var sentence = parser.sentenceToWords('This is a paragraph?');
 
-        words.children.should.be.an.instanceOf(Array);
+        sentence.children.should.be.an.instanceOf(Array);
+      });
+
+      it('should determine the correct number of words in the sentence and put it as the length', function() {
+        var sentence = parser.sentenceToWords('This is a sentence with, a lot of words that go on for a while.');
+
+        sentence.length.should.eql(15);
       });
     });
 
     // checking that it parses the sentence into words correctly
     describe('checking that it parses correctly', function() {
       it('should split the sentence at the spaces', function() {
-        var words = parser.sentenceToWords('This is a paragraph?');
+        var sentence = parser.sentenceToWords('This is a paragraph?');
 
-        words.children.should.eql([
+        sentence.children.should.eql([
           'This',
           'is',
           'a',
@@ -157,9 +181,9 @@ describe('lib/text-parse', function() {
       });
 
       it('should split the sentence at the spaces even when there is more than one', function() {
-        var words = parser.sentenceToWords('This is a    paragraph?');
+        var sentence = parser.sentenceToWords('This is a    paragraph?');
 
-        words.children.should.eql([
+        sentence.children.should.eql([
           'This',
           'is',
           'a',
@@ -171,34 +195,40 @@ describe('lib/text-parse', function() {
 
   // text-parse.wordToChars
   describe('wordToChars', function() {
-    // checking that returns raw, noPunctuation, type, and children attributes
+    // checking that returns raw, noPunctuation, type, length, and children attributes
     describe('checking that returned object has correct attributes without POS', function() {
       beforeEach(function() {
         parser = textparse();
       });
 
       it('should have a raw attribute which has the word with the punctuation', function() {
-        var words = parser.wordToChars('This?');
+        var word = parser.wordToChars('This?');
 
-        words.raw.should.equal('This?');
+        word.raw.should.equal('This?');
       });
 
       it('should have a noPunctuation attribute which has the word without the punctuation', function() {
-        var words = parser.wordToChars('This?');
+        var word = parser.wordToChars('This?');
 
-        words.noPunctuation.should.equal('This');
+        word.noPunctuation.should.equal('This');
       });
 
       it('should have a type attribute which should be the right type', function() {
-        var words = parser.wordToChars('This?');
+        var word = parser.wordToChars('This?');
 
-        words.type.should.equal('word');
+        word.type.should.equal('word');
       });
 
       it('should not have a partOfSpeech attribute when the pos option is not true', function() {
-        var words = parser.wordToChars('This?');
+        var word = parser.wordToChars('This?');
 
-        should.not.exist(words.partOfSpeech);
+        should.not.exist(word.partOfSpeech);
+      });
+
+      it('should determine the correct number of characters in the word and put it as the length', function() {
+        var word = parser.wordToChars('Hello?');
+
+        word.length.should.eql(6);
       });
     });
 
@@ -209,20 +239,20 @@ describe('lib/text-parse', function() {
       });
 
       it('should have a partOfSpeech attribute which should be a string representation of the part of speech', function() {
-        var words = parser.wordToChars('John');
+        var word = parser.wordToChars('John');
 
-        words.partOfSpeech.should.equal('NNP');
+        word.partOfSpeech.should.equal('NNP');
       });
     });
 
     // checking that it parses each word correctly
     describe('checking that it parses correctly', function() {
       it('should label the characters correctly', function() {
-        var words = parser.wordToChars('This?');
+        var word = parser.wordToChars('This?');
 
-        words.should.have.property('children');
+        word.should.have.property('children');
 
-        words.children.should.eql([
+        word.children.should.eql([
           {raw: 'T', type: 'letter'},
           {raw: 'h', type: 'letter'},
           {raw: 'i', type: 'letter'},
