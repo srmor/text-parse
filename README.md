@@ -10,6 +10,8 @@ npm install text-parse
 
 ## Running Tests
 
+[![Build Status](https://travis-ci.org/srmor/text-parse.png?branch=master)](https://travis-ci.org/srmor/text-parse)
+
 ```
 make test
 ```
