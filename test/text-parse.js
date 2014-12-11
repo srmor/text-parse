@@ -20,7 +20,7 @@ describe('lib/text-parse', function() {
       it('should return an object with the right raw, type and children attributes', function() {
         var text = parser.textToParagraphs('This is. a sentence? This is. a second sentences. Sentence it is.');
 
-        text.should.be.a('object');
+        text.should.be.a.type('object');
         text.raw.should.eql('This is. a sentence? This is. a second sentences. Sentence it is.');
         text.type.should.eql('text');
         text.should.have.property('children');
@@ -126,7 +126,7 @@ describe('lib/text-parse', function() {
       it('should split a paragraph and include the last sentence in the results even though there is no space after the punctuation', function() {
         var paragraph = parser.paragraphToSentences('This is. a paragraph? With words and, punctuation.');
 
-        paragraph.children.should.include('With words and, punctuation.');
+        (paragraph.children).should.endWith('With words and, punctuation.');
       });
     });
   });
