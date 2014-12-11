@@ -1,8 +1,16 @@
 var textparse = require('./lib/text-parse');
 
-module.exports = function(text, options) {
-  var options = options || {};
+module.exports = function() {
+  var self = {};
 
-  var parser = textparse(options);
-  return parser.textToParagraphs(text);
+  self.textparse = textparse;
+
+  self.parse = function(text, options) {
+    var options = options || {};
+
+    var parser = self.textparse(options);
+    return parser.textToParagraphs(text);
+  };
+
+  return self;
 };

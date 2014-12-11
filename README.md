@@ -19,13 +19,14 @@ make test
 ## Usage
 
 ```
-var parse = require('text-parse');
-console.log(parse(text));
+var TextParse = require('text-parse');
+var parser = TextParse();
+console.log(parser.parse("This is some text?"));
 ```
 
 ## Part of Speech Option
 
-Optionally text-parse can return the part of speech of each word (powered by [pos](https://github.com/fortnightlabs/pos-js)). To enable this option just include it in the option object parameter of the parser. So instead of using `var parseTree = parse(text)` you can do `var parseTree = parse(text, {pos: true})` and it will return a `partOfSpeech` attribute on all the word objects. The part of speech tags are the same tags that [pos](https://github.com/fortnightlabs/pos-js) returns.
+Optionally text-parse can return the part of speech of each word (powered by [pos](https://github.com/fortnightlabs/pos-js)). To enable this option just include it in the option object parameter of the parser. So instead of using `var parseTree = parser.parse(text)` you can do `var parseTree = parser.parse(text, {pos: true})` and it will return a `partOfSpeech` attribute on all the word objects. The part of speech tags are the same tags that [pos](https://github.com/fortnightlabs/pos-js) returns.
 
 ## Example
 
