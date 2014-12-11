@@ -225,6 +225,13 @@ describe('lib/text-parse', function() {
         should.not.exist(word.partOfSpeech);
       });
 
+      it('should not have a withoutPossessive attribute and the possessive attribute should be false when the word is not possessive', function() {
+        var word = parser.wordToChars('This?');
+
+        (word.possessive).should.not.be.true;
+        should.not.exist(word.withoutPossessive);
+      });
+
       it('should determine the correct number of characters in the word and put it as the length', function() {
         var word = parser.wordToChars('Hello?');
 
@@ -242,6 +249,26 @@ describe('lib/text-parse', function() {
         var word = parser.wordToChars('John');
 
         word.partOfSpeech.should.equal('NNP');
+      });
+    });
+
+    describe('check that the returned object has the correct attributes when it is possessive', function() {
+      beforeEach(function() {
+        parser = textparse();
+      });
+
+      it('should have a possessive attribute set to true and a withoutPossessive attribute when the word is a singular possessive', function() {
+        var word = parser.wordToChars('John\'s');
+
+        word.should.have.property('possessive', true);
+        word.should.have.property('withoutPossessive');
+      });
+
+      it('should have a possessive attribute set to true and a withoutPossessive attribute when the word is a plural possessive', function() {
+        var word = parser.wordToChars('Johns\'');
+
+        word.should.have.property('possessive', true);
+        word.should.have.property('withoutPossessive');
       });
     });
 
@@ -271,7 +298,24 @@ describe('lib/text-parse', function() {
 
     it('should return a part of speech for a word', function() {
       var partOfSpeech = parser.wordPOS('the');
-      partOfSpeech.should.be.a('string');
+      partOfSpeech.should.be.a.type('string');
+    });
+  });
+
+  // removePossessive
+  describe('removePossessive', function() {
+    beforeEach(function() {
+      parser = textparse();
+    });
+
+    it('should remove the possessive from singular words', function() {
+      var wordWithoutPossessive = parser.removePossessive('John\'s');
+      wordWithoutPossessive.should.equal('John');
+    });
+
+    it('should remove the possessive from plural words', function() {
+      var wordWithoutPossessive = parser.removePossessive('Johns\'');
+      wordWithoutPossessive.should.equal('Johns');
     });
   });
 });
