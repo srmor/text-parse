@@ -140,7 +140,7 @@ Sed ut unde, omnis error sit voluptatem; accusantium's.
                 length: 14,
                 noPunctuation: 'accusantiums',
                 possessive: true,
-                withoutPossessive: 'accusantium',
+                withoutPossessive: 'accusantium.',
                 children:
                  [ { raw: 'a', type: 'letter' },
                    { raw: 'c', type: 'letter' },
