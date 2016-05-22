@@ -99,6 +99,12 @@ describe('lib/text-parse', function() {
 
         paragraph.length.should.eql(3);
       });
+
+      it('should handle sentences which don\'t contain closing punctiation', function() {
+        var text = parser.textToParagraphs('This is a paragraph without a period, question, or exclamation');
+
+        text.length.should.eql(1);
+      });
     });
 
     // checking that it parses the paragraph correctly
